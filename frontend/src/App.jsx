@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchDefaults, visualize } from './api.js'
 import SettingsPanel from './components/SettingsPanel.jsx'
-import TextInput from './components/TextInput.jsx'
+import TextInput, { splitTexts } from './components/TextInput.jsx'
 import Controls from './components/Controls.jsx'
 import Plot3D from './components/Plot3D.jsx'
 import InfoPanel from './components/InfoPanel.jsx'
@@ -14,6 +14,7 @@ export default function App() {
   })
   const [hasServerKey, setHasServerKey] = useState(false)
   const [rawText, setRawText] = useState('')
+  const [splitMode, setSplitMode] = useState('line')
   const [reduction, setReduction] = useState({
     method: 'umap', n_neighbors: 15, min_dist: 0.1, perplexity: 30,
   })
@@ -37,9 +38,9 @@ export default function App() {
   }, [])
 
   const run = useCallback(async () => {
-    const texts = rawText.split('\n').map((l) => l.trim()).filter(Boolean)
+    const texts = splitTexts(rawText, splitMode)
     if (texts.length < 4) {
-      setError('Informe pelo menos 4 textos (um por linha).')
+      setError('Informe pelo menos 4 textos (confira o separador escolhido).')
       return
     }
     setLoading(true)
@@ -59,7 +60,7 @@ export default function App() {
     } finally {
       setLoading(false)
     }
-  }, [rawText, provider, reduction, clustering, neighborsK])
+  }, [rawText, splitMode, provider, reduction, clustering, neighborsK])
 
   const selectedPoint = data?.points.find((p) => p.id === selectedId) ?? null
 
@@ -72,7 +73,10 @@ export default function App() {
         </header>
 
         <SettingsPanel provider={provider} onChange={setProvider} hasServerKey={hasServerKey} />
-        <TextInput value={rawText} onChange={setRawText} />
+        <TextInput
+          value={rawText} onChange={setRawText}
+          splitMode={splitMode} onSplitModeChange={setSplitMode}
+        />
         <Controls
           reduction={reduction} onReductionChange={setReduction}
           clustering={clustering} onClusteringChange={setClustering}
