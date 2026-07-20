@@ -90,10 +90,16 @@ export default function App() {
       <main className="plot-area">
         {data && (
           <div className="meta-bar">
-            <span>{data.meta.count} textos</span>
-            <span>{data.meta.model} · {data.meta.dim}d</span>
-            <span>{data.meta.reduction_method.toUpperCase()}</span>
-            <span title="Fidelidade da projeção 3D às vizinhanças do espaço original (0–1)">
+            <span title="Quantidade de textos embedados nesta visualização">
+              {data.meta.count} textos
+            </span>
+            <span title={`Modelo de embeddings usado e a dimensão original dos vetores (${data.meta.dim} dimensões, projetadas para 3)`}>
+              {data.meta.model} · {data.meta.dim}d
+            </span>
+            <span title="Método de redução dimensional usado para projetar os vetores em 3D">
+              {data.meta.reduction_method.toUpperCase()}
+            </span>
+            <span title="Trustworthiness: quanto a projeção 3D preservou as vizinhanças reais do espaço original (0–100%). Abaixo de ~85%, desconfie das distâncias visuais e confie nos scores de cosseno do painel de detalhes.">
               confiabilidade: {(data.meta.trustworthiness * 100).toFixed(1)}%
             </span>
           </div>
