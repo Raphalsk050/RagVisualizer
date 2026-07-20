@@ -27,6 +27,9 @@ const TIPS = {
   show_lines:
     'Ao clicar em um ponto, desenha linhas até seus vizinhos semânticos. ' +
     'Linhas mais grossas = maior similaridade.',
+  point_scale:
+    'Tamanho visual dos pontos no gráfico. Só muda a aparência dos marcadores — ' +
+    'não altera posições, distâncias nem os cálculos de similaridade.',
 }
 
 export default function Controls({
@@ -34,6 +37,7 @@ export default function Controls({
   clustering, onClusteringChange,
   showLines, onShowLinesChange,
   neighborsK, onNeighborsKChange,
+  pointScale, onPointScaleChange,
 }) {
   const setR = (field, parse = (v) => v) => (e) =>
     onReductionChange({ ...reduction, [field]: parse(e.target.value) })
@@ -97,6 +101,12 @@ export default function Controls({
         vizinhos (k): {neighborsK}
         <input type="range" min="1" max="10" value={neighborsK}
           onChange={(e) => onNeighborsKChange(Number(e.target.value))} />
+      </label>
+
+      <label title={TIPS.point_scale}>
+        tamanho dos pontos: {pointScale.toFixed(1)}×
+        <input type="range" min="0.4" max="3" step="0.2" value={pointScale}
+          onChange={(e) => onPointScaleChange(Number(e.target.value))} />
       </label>
 
       <label className="checkbox" title={TIPS.show_lines}>

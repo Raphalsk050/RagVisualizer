@@ -9,7 +9,7 @@ const NOISE_COLOR = '#8a8f98'
 
 const truncate = (s, n = 60) => (s.length > n ? s.slice(0, n) + '…' : s)
 
-export default function Plot3D({ points, selectedId, showLines, onSelect }) {
+export default function Plot3D({ points, selectedId, showLines, pointScale = 1, onSelect }) {
   const ref = useRef(null)
 
   const traces = useMemo(() => {
@@ -33,7 +33,7 @@ export default function Plot3D({ points, selectedId, showLines, onSelect }) {
       hoverinfo: 'text',
       marker: {
         size: points.map((p) =>
-          p.id === selectedId ? 10 : neighborIds.has(p.id) ? 8 : 5,
+          (p.id === selectedId ? 10 : neighborIds.has(p.id) ? 8 : 5) * pointScale,
         ),
         color: points.map((p) =>
           p.cluster === -1 ? NOISE_COLOR : CLUSTER_COLORS[p.cluster % CLUSTER_COLORS.length],
@@ -69,7 +69,7 @@ export default function Plot3D({ points, selectedId, showLines, onSelect }) {
       }
     }
     return result
-  }, [points, selectedId, showLines])
+  }, [points, selectedId, showLines, pointScale])
 
   // onSelect via ref: o listener e vinculado uma unica vez por div e precisa
   // sempre enxergar o callback atual.

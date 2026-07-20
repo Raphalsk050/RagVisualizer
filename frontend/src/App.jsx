@@ -20,6 +20,7 @@ export default function App() {
   const [clustering, setClustering] = useState({ method: 'hdbscan', n_clusters: 8 })
   const [neighborsK, setNeighborsK] = useState(5)
   const [showLines, setShowLines] = useState(true)
+  const [pointScale, setPointScale] = useState(1)
 
   const [data, setData] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
@@ -77,6 +78,7 @@ export default function App() {
           clustering={clustering} onClusteringChange={setClustering}
           showLines={showLines} onShowLinesChange={setShowLines}
           neighborsK={neighborsK} onNeighborsKChange={setNeighborsK}
+          pointScale={pointScale} onPointScaleChange={setPointScale}
         />
 
         <button type="button" className="primary" onClick={run} disabled={loading}>
@@ -108,6 +110,7 @@ export default function App() {
           points={data?.points}
           selectedId={selectedId}
           showLines={showLines}
+          pointScale={pointScale}
           onSelect={setSelectedId}
         />
       </main>
